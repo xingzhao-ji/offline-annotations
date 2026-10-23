@@ -108,6 +108,13 @@ register the worker. Actual storage availability/eviction is browser-controlled.
 - IndexedDB stores snapshots per room/capability, so a read-only invite does not
   inherit another invite's unsent local edits. Read/merge/write uses one serialized
   IndexedDB transaction, preserving divergent snapshots from two offline tabs.
+  The committed merge is applied to the live document, and reconnect and every
+  outbound snapshot reload the durable cache. Same-origin BroadcastChannel
+  notifications refresh other tabs for that exact room/invite; notifications
+  contain only an invalidation key, never document data. Cache-origin updates
+  are not saved again, preventing notification loops. If notifications are
+  unavailable or missed, reconnect still includes a closed tab's saved work.
+  An online tab using the same invite can relay those edits to the server.
 
 Yjs references: [document updates](https://docs.yjs.dev/api/document-updates),
 [Y.Map](https://docs.yjs.dev/api/shared-types/y.map), and
@@ -138,7 +145,13 @@ Slow receivers are disconnected when queued output exceeds the bound. HTML,
 embeds and rich-text attributes are rejected; React renders note strings as text.
 
 Concurrent offline edits may exceed the aggregate limits even when each local
-edit fits. Rejected work remains local and is visibly marked unsynced. Limits,
+edit fits. Rejected work remains local and is visibly marked unsynced. Confirmed
+writers can shorten overlong merged notes locally, then reconnect to retry.
+Removing a note does not reclaim its identity or CRDT history: note-count or
+history overflow requires exporting the local notes and starting a new room.
+The recovery notice offers a plain JSON export without invite credentials; there
+is no automatic import, reset, or compaction. Observed revoked/unauthorized links
+lose their cached editing role. Limits,
 in-memory rate limits, and candidate validation reduce resource exposure; they
 are not a substitute for a production abuse-control system. Do not store sensitive
 material in a public demo. A single Node process owns the database and all room
@@ -158,7 +171,10 @@ same-note concurrent text inserts, delete-vs-edit, duplicate delivery, database
 reopen, read-only/cross-room access, guest revocation, malformed/oversized frames,
 immutable anchors, tombstones and plain-text validation. IndexedDB adapter tests
 use `fake-indexeddb`; they verify transaction/reopen behavior without claiming to
-replace real-browser testing. `smoke` starts the compiled server and requests the
+replace real-browser testing. Actual `RoomClient` regressions also cover closed
+offline tabs with notifications unavailable, live cache propagation, capability
+cache isolation, save-loop prevention, online relay, aggregate-text repair, and
+authority-error lockout. `smoke` starts the compiled server and requests the
 built HTML, assets, health endpoint, and room creation API.
 
 See [verification record](docs/VERIFICATION.md) and [short implementation plan](docs/PLAN.md).

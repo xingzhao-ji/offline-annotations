@@ -7,7 +7,7 @@ application was accessed.
 | Command | Result |
 | --- | --- |
 | `npm ci --no-audit --no-fund` | Passed; dependencies restored from the committed lockfile |
-| `npm test` | 11 tests passed; no failures or skips |
+| `npm test` | 15 tests passed; no failures or skips |
 | `npm run build` | TypeScript checks, Vite production bundle, and server compilation passed |
 | `npm run smoke` | Compiled HTTP server served health, HTML, JS/CSS, service worker; traversal rejected; room created |
 | `git diff --cached --check` | Passed before the implementation commit |
@@ -24,6 +24,20 @@ anchors, and attempts to undo deletion. Large valid snapshots are also accepted.
 Local persistence tests use **fake-indexeddb**, then reopen the adapter into a new
 Y.Doc. They test IDB transaction completion, two-tab merge-before-write, and failure reporting; they are not
 evidence of a real browser's quota, eviction, or offline-cache behavior.
+
+Four additional tests instantiate the actual RoomClient with real WebSockets and
+fake-indexeddb. They cover a same-invite offline tab saving and closing before
+another tab reconnects (with notifications disabled), live notification delivery
+of notes/edits/tombstones, per-invite cache isolation, absence of save loops, an
+online tab relaying an offline tab's committed work, and server state matching
+the client when it reports synced. Concurrent 1,500-character edits merge to an
+invalid 3,000-character note; the client retains editable, visibly unsynced state,
+accepts incremental shortening, and successfully reconnects after repair. A
+revoked guest remains non-editable even after toggling offline and reconnecting.
+
+The closed-tab test was first run against the original implementation and failed
+with `live B must include saved closed-tab edits before reporting synced`. The
+fixed implementation passes the same scenario without BroadcastChannel support.
 
 Limits of this verification:
 

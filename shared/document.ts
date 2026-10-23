@@ -34,11 +34,13 @@ export function addAnnotation(doc: Y.Doc, start: number, end: number, body: stri
   return id;
 }
 export function editAnnotation(doc: Y.Doc, id: string, next: string): void {
-  if (next.length > MAX_BODY) throw new Error('Notes are limited to 2,000 characters.');
   if (tombstones(doc).get(id)) return;
   const body = annotations(doc).get(id)?.get('body');
   if (!(body instanceof Y.Text)) throw new Error('Note is unavailable.');
   const previous = body.toString();
+  // Concurrent valid offline edits can merge above the body limit. Allow
+  // incremental shortening so users can repair their retained local copy.
+  if (next.length > MAX_BODY && next.length >= previous.length) throw new Error('Notes are limited to 2,000 characters. Shorten this note to sync.');
   let start = 0;
   while (start < previous.length && start < next.length && previous[start] === next[start]) start++;
   let end = 0;
