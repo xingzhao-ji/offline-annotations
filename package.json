@@ -1,0 +1,33 @@
+{
+  "name": "offline-annotations",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline annotation rooms with Yjs, IndexedDB, and a capability-checked SQLite sync server",
+  "engines": { "node": ">=24.0.0" },
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "dev:server": "node --import tsx server/main.ts",
+    "build": "tsc --noEmit && vite build && tsc -p tsconfig.server.json",
+    "start": "node build/server/main.js",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "smoke": "node tests/build-smoke.mjs",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "ws": "^8.18.3",
+    "yjs": "13.6.33"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/ws": "^8.18.1",
+    "fake-indexeddb": "^6.2.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.3",
+    "vite": "8.3.5"
+  }
+}

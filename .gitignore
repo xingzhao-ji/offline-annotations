@@ -1,0 +1,8 @@
+node_modules/
+dist/
+build/
+data/
+*.sqlite*
+.env
+coverage/
+test-results/

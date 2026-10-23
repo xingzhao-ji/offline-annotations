@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ES2023", "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "NodeNext", "moduleResolution": "NodeNext", "jsx": "react-jsx",
+    "strict": true, "noEmit": true, "skipLibCheck": true, "esModuleInterop": true,
+    "types": ["node"], "allowImportingTsExtensions": false
+  },
+  "include": ["src", "server", "shared", "tests", "vite.config.ts"]
+}
