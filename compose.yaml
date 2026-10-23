@@ -1,0 +1,10 @@
+services:
+  margin:
+    build: .
+    ports:
+      - "127.0.0.1:3044:3044"
+    volumes:
+      - margin-data:/data
+    restart: unless-stopped
+volumes:
+  margin-data:
