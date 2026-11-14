@@ -6,7 +6,7 @@ through **Yjs**. React renders the reading interface; IndexedDB keeps local
 snapshots; a Node 24 WebSocket server authorizes room capabilities and commits
 accepted state to SQLite before acknowledging it.
 
-This is a **0.1.0 portfolio implementation**, not a claim of production use. The
+This is a **0.1.0 implementation**, not a claim of production use. The
 document is one fixed, synthetic plain-text essay. No private project source or
 personal records are included. No AI service, account, or paid API is required.
 

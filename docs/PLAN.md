@@ -19,7 +19,7 @@ Capabilities are bearer secrets; the creator can rotate shared read/write links.
 Offline edits are provisional until accepted by the server. Revoked clients retain
 previously downloaded data and their local work; revocation cannot erase it.
 
-Review follow-up: reconcile committed IndexedDB state into the live RoomClient
+Follow-up: reconcile committed IndexedDB state into the live RoomClient
 before reconnect and send; propagate per-invite cache invalidations without
 write loops; gate synced status on outstanding cache reads and acknowledged
 revisions. Add actual RoomClient network/cache regressions. Keep aggregate-limit

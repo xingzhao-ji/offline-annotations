@@ -1,8 +1,8 @@
 # Verification record
 
 Environment: Node **24.19.0**, npm **11.9.0**, Linux. The implementation was checked
-with a fresh lockfile install. No live employer, user account, or third-party
-application was accessed.
+with a fresh lockfile install. No live user account or third-party application
+was accessed.
 
 | Command | Result |
 | --- | --- |
@@ -41,11 +41,10 @@ fixed implementation passes the same scenario without BroadcastChannel support.
 
 Limits of this verification:
 
-- The implementing agent did not run a live browser. Root-level browser review
-  is a separate check; no screenshots or browser accessibility audit are claimed
+- No live browser run, screenshots or browser accessibility audit is claimed
   here.
-- Docker is not installed in the implementation environment. Dockerfile and
-  Compose definitions were not built/run.
+- Docker was not available in the test environment. Dockerfile and Compose
+  definitions were not built/run.
 - Restart coverage closes and reopens the server/SQLite file. It does not inject
   filesystem corruption, power loss, or process termination during an fsync.
 - No load/performance benchmark, public hosting, multi-process operation, user
